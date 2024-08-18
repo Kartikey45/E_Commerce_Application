@@ -205,6 +205,23 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { message = "password changed successfully", result = result });
         }
 
+        [HttpGet("confirm-email")]
+        public async Task<ActionResult> ConfirmEmail(string uid, string token)
+        {
+            if (!string.IsNullOrEmpty(uid) && !string.IsNullOrEmpty(token))
+            {
+                token = token.Replace(' ', '+');
+                var user = await _userManager.FindByIdAsync(uid);
+                var result = await _userManager.ConfirmEmailAsync(user, token);
+                if (!result.Succeeded)
+                {
+                    return Conflict("Email not confirmed.");
+                }
+                return Ok("Email confirmed !");
+            }
+            return BadRequest("invalid parameters passed");
+        }
+
 
     }
 }
