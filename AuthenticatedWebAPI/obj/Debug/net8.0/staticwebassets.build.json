@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "iXJDsM0H51Z/NVvu1piTo+XQmIsIZjfzLqTjBd6Mklk=",
+  "Source": "AuthenticatedWebAPI",
+  "BasePath": "_content/AuthenticatedWebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
