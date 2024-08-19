@@ -222,6 +222,28 @@ namespace AuthenticatedWebAPI.Controllers
             return BadRequest("invalid parameters passed");
         }
 
+        [HttpPost("resend-email-confirmation-mail")]
+        public async Task<ActionResult> ConfirmEmail(EmailConfirmModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Conflict("Something went wrong !");
+            }
+            if (user.EmailConfirmed)
+            {
+                model.IsConfirmed = true;
+                return Ok("Email id is already confirmed !");
+            }
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await _emailService.SendEmailForConfirmation(user, token);
+                model.EmailSent = true;
+            }
+            return Ok("Email Sent !");
+        }
+
 
     }
 }

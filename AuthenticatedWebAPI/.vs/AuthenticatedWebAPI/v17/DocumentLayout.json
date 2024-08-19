@@ -7,8 +7,8 @@
       "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:service\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\models\\emailconfirmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:models\\emailconfirmmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "appsettings.json",
               "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\appsettings.json",
               "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABkAAAAnAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-08-18T21:26:24.395Z",
               "IsPinned": true,
@@ -46,7 +46,7 @@
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
               "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Controllers\\AccountController.cs",
               "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADEAAAAAAAAA",
+              "ViewState": "AQIAAN8AAAAAAAAAAAAAwPIAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-18T21:23:48.968Z",
               "IsPinned": true,
@@ -55,14 +55,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "UserService.cs",
-              "DocumentMoniker": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Service\\UserService.cs",
-              "RelativeDocumentMoniker": "Service\\UserService.cs",
-              "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Service\\UserService.cs",
-              "RelativeToolTip": "Service\\UserService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAJAAAA",
+              "Title": "EmailConfirmModel.cs",
+              "DocumentMoniker": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Models\\EmailConfirmModel.cs",
+              "RelativeDocumentMoniker": "Models\\EmailConfirmModel.cs",
+              "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Models\\EmailConfirmModel.cs",
+              "RelativeToolTip": "Models\\EmailConfirmModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAuwAIAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-18T21:34:35.103Z",
+              "WhenOpened": "2024-08-19T10:11:33.07Z",
               "EditorCaption": ""
             }
           ]
