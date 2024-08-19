@@ -7,16 +7,20 @@
       "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\emailtemplate\\forgotpasssword.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:emailtemplate\\forgotpasssword.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\service\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:service\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\service\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:service\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|c:\\fullstackwebapp\\backend\\e_commerce_application\\authenticatedwebapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9945E217-DDE4-41CD-922F-9DBD1658063B}|AuthenticatedWebAPI.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +34,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\appsettings.json",
               "RelativeDocumentMoniker": "appsettings.json",
@@ -39,8 +43,7 @@
               "ViewState": "AQIAAAYAAAAAAAAAAAAAABoAAAATAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
               "WhenOpened": "2024-08-18T21:26:24.395Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -50,7 +53,7 @@
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
               "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Controllers\\AccountController.cs",
               "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AQIAAJcAAAAAAAAAAAAAAAsBAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-18T21:23:48.968Z",
               "IsPinned": true,
@@ -72,16 +75,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "EmailService.cs",
               "DocumentMoniker": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Service\\EmailService.cs",
               "RelativeDocumentMoniker": "Service\\EmailService.cs",
               "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\Service\\EmailService.cs",
               "RelativeToolTip": "Service\\EmailService.cs",
-              "ViewState": "AQIAABsAAAAAAAAAAAAvwEIAAABYAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAA1wBsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-19T13:56:40.215Z",
+              "WhenOpened": "2024-08-19T18:37:57.188Z",
               "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ForgotPasssword.html",
+              "DocumentMoniker": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\EmailTemplate\\ForgotPasssword.html",
+              "RelativeDocumentMoniker": "EmailTemplate\\ForgotPasssword.html",
+              "ToolTip": "C:\\FullStackWebApp\\Backend\\E_Commerce_Application\\AuthenticatedWebAPI\\EmailTemplate\\ForgotPasssword.html",
+              "RelativeToolTip": "EmailTemplate\\ForgotPasssword.html",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2024-08-19T18:54:56.568Z",
               "EditorCaption": ""
             }
           ]

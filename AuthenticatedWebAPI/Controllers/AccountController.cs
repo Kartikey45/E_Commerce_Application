@@ -261,6 +261,19 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok("Email Sent !");
         }
 
+        [AllowAnonymous, HttpPost("reset-password")] 
+        public async Task<ActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            model.Token = model.Token.Replace(' ', '+');
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                return Conflict("unable to reset password !");
+            }
+            model.IsSuccess = true;
+            return Ok("Password successfullly reset !");
+        }
 
 
     }
