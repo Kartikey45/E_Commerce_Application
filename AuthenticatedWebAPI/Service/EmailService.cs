@@ -48,6 +48,29 @@ namespace AuthenticatedWebAPI.Service
             await SendEmail(userEmailOptions).ConfigureAwait(false);
         }
 
+        public async Task SendForgetPasswordEmail(User user, string token)
+        {
+            string appDomain = _configuration.GetSection("Application:AppDomain").Value;
+            string confirmationLink = _configuration.GetSection("Application:ForgotPassword").Value;
+            UserEmailOptions options = new()
+            {
+                ToEmails = new List<string>() { user.Email },
+                PlaceHolders = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string, string>("{{UserName}}", user.Name),
+                    new KeyValuePair<string, string>("{{Link}}", string.Format(appDomain + confirmationLink, user.Id, token))
+                }
+            };
+            await SendEmailForForgotPassword(options).ConfigureAwait(false);
+        }
+
+        private async Task SendEmailForForgotPassword(UserEmailOptions userEmailOptions)
+        {
+            userEmailOptions.Subject = UpdatePlaceHolders("Hello {{UserName}}, reset your password.", userEmailOptions.PlaceHolders);
+            userEmailOptions.Body = UpdatePlaceHolders(GetEmailBody("ForgotPasssword"), userEmailOptions.PlaceHolders);
+            await SendEmail(userEmailOptions).ConfigureAwait(false);
+        }
+
         private async Task SendEmail(UserEmailOptions userEmailOptions)
         {
             MailMessage mail = new MailMessage()

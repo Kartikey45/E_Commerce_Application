@@ -6,5 +6,6 @@ namespace AuthenticatedWebAPI.Service
     {
         Task SendTestEmail(UserEmailOptions userEmailOptions);
         Task SendEmailForConfirmation(User user, string token);
+        Task SendForgetPasswordEmail(User user, string token);
     }
 }

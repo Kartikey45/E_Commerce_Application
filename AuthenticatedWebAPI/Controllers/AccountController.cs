@@ -244,6 +244,24 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok("Email Sent !");
         }
 
+        [AllowAnonymous, HttpPost("forgot-password")]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Conflict("Something went wrong !");
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(token))
+            {
+                await _emailService.SendForgetPasswordEmail(user, token);
+                model.EmailSent = true;
+            }
+            return Ok("Email Sent !");
+        }
+
+
 
     }
 }
