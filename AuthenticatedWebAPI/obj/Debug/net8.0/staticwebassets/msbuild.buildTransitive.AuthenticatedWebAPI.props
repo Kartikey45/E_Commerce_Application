@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\AuthenticatedWebAPI.props" />
-</Project>
