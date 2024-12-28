@@ -19,10 +19,14 @@ namespace AuthenticatedWebAPI.Models
         public string Password { get; set; }
 
         [Required(ErrorMessage = "please enter your password")]
-        [Display(Name = "ConfirmPassword")]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         [Display(Name = "Is admin")]
         public bool IsAdmin { get; set; } = false;
+
+        [Required(ErrorMessage = "role required")]
+        [Display(Name = "Role Name")]
+        public string RoleName { get; set; } = "Admin";
     }
 }

@@ -3,6 +3,7 @@ using AuthenticatedWebAPI.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 
 namespace AuthenticatedWebAPI.Controllers
@@ -13,18 +14,20 @@ namespace AuthenticatedWebAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly ITokenService _tokenService;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, IUserService userService,
-            IEmailService emailService, ITokenService tokenService)
+        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,
+            IUserService userService, IEmailService emailService, ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userService = userService;
             _emailService = emailService;
             _tokenService = tokenService;
+            _roleManager = roleManager;
         }
 
 
@@ -60,6 +63,17 @@ namespace AuthenticatedWebAPI.Controllers
             IdentityResult result = new();
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                       .Where(x => x.Value.Errors.Any())
+                       .ToDictionary(
+                           x => x.Key,
+                           x => x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                       );
+                    return BadRequest(errors);
+                }
+
                 var user = new User()
                 {
                     Name = signUpUser.Name,
@@ -98,7 +112,7 @@ namespace AuthenticatedWebAPI.Controllers
                      _user.EmailConfirmed = true;
                  }*/
                 var result = await _signInManager.PasswordSignInAsync(_user, login.Password, login.RememberMe, false).ConfigureAwait(false);
-               
+
                 if (!result.Succeeded)
                 {
                     return Unauthorized("check your login credentials and try again.");
@@ -266,7 +280,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok("Email Sent !");
         }
 
-        [AllowAnonymous, HttpPost("reset-password")] 
+        [AllowAnonymous, HttpPost("reset-password")]
         public async Task<ActionResult> ResetPassword(ResetPasswordModelDto model)
         {
             model.Token = model.Token.Replace(' ', '+');
@@ -284,7 +298,76 @@ namespace AuthenticatedWebAPI.Controllers
 
         #region Authenticate
 
-        [HttpPost("Authenticate")]
+        [HttpPost("add-user")]
+        public async Task<ActionResult> AddUser([FromBody] SignUpUserDto signUpUser)
+        {
+            string message = "";
+            IdentityResult result = new();
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState
+                       .Where(x => x.Value.Errors.Any())
+                       .ToDictionary(
+                           x => x.Key,
+                           x => x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                       );
+                    return BadRequest(errors);
+                }
+
+                // Check if duplicate user exists
+                var userExists = await _userManager.FindByEmailAsync(signUpUser.Email);
+                if (userExists != null)
+                {
+                    return BadRequest($"Email '{signUpUser.Email}' already exists.");
+                }
+
+                // Check if the role exists
+                var roleExists = await _roleManager.RoleExistsAsync(signUpUser.RoleName);
+                if (!roleExists)
+                {
+                    return BadRequest($"Role '{signUpUser.RoleName}' does not exist.");
+                }
+
+                var user = new User()
+                {
+                    Name = signUpUser.Name,
+                    Email = signUpUser.Email,
+                    UserName = signUpUser.Email,
+                    IsAdmin = signUpUser.IsAdmin
+                };
+                result = await _userManager.CreateAsync(user, signUpUser.Password).ConfigureAwait(false);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors);
+                }
+
+                // Add user to the role
+                var roleAssignmentResult = await _userManager.AddToRoleAsync(user, signUpUser.RoleName);
+                if (!roleAssignmentResult.Succeeded)
+                {
+                    return BadRequest(roleAssignmentResult.Errors);
+                }
+
+                // Send email confirmation
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    await _emailService.SendEmailForConfirmation(user, token);
+                }
+                message = "registered successfull.";
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("something went wrong, please try again." + ex.Message);
+            }
+            return Ok(new { message = message, result = result });
+        }
+
+
+        [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] SignInUserDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
