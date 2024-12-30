@@ -28,5 +28,6 @@ namespace AuthenticatedWebAPI.Models
         [Required(ErrorMessage = "role required")]
         [Display(Name = "Role Name")]
         public string RoleName { get; set; } = "Admin";
+
     }
 }

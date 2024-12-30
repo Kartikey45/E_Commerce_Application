@@ -3,7 +3,6 @@ using AuthenticatedWebAPI.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 
 namespace AuthenticatedWebAPI.Controllers

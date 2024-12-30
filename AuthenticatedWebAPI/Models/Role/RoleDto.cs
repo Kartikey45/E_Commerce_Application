@@ -7,5 +7,8 @@ namespace AuthenticatedWebAPI.Models.Role
         [Required(ErrorMessage = "role required")]
         [Display(Name = "Role Name")]
         public string Name { get; set; }
+
+        [Display(Name = "Permissions")]
+        public List<string> Permissions { get; set; } = new();
     }
 }
