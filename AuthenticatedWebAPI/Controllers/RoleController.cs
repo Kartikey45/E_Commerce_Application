@@ -21,6 +21,7 @@ namespace AuthenticatedWebAPI.Controllers
         }
 
         [HttpPost]
+        [DynamicPermission("Create")]
         public async Task<IActionResult> CreateRole([FromBody] RoleDto roleDto)
         {
 
@@ -71,6 +72,7 @@ namespace AuthenticatedWebAPI.Controllers
         }
 
         [HttpGet]
+        [DynamicPermission("View")]
         public IActionResult GetAllRoles()
         {
             var roles = _roleManager.Roles.ToList();
@@ -82,6 +84,7 @@ namespace AuthenticatedWebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [DynamicPermission("View")]
         public async Task<IActionResult> GetRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -92,6 +95,7 @@ namespace AuthenticatedWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [DynamicPermission("Edit")]
         public async Task<IActionResult> UpdateRole(string id, [FromBody] RoleDto roleDto)
         {
             if (!ModelState.IsValid)
@@ -153,6 +157,7 @@ namespace AuthenticatedWebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [DynamicPermission("Delete")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);

@@ -1,8 +1,10 @@
-﻿using AuthenticatedWebAPI.Models;
+﻿using AuthenticatedWebAPI.Data;
+using AuthenticatedWebAPI.Models;
 using AuthenticatedWebAPI.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace AuthenticatedWebAPI.Controllers
@@ -17,9 +19,11 @@ namespace AuthenticatedWebAPI.Controllers
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
         private readonly ITokenService _tokenService;
+        private readonly ApplicationDbContext _dbContext;
+
 
         public UserController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,
-            IUserService userService, IEmailService emailService, ITokenService tokenService)
+            IUserService userService, IEmailService emailService, ITokenService tokenService, ApplicationDbContext dbContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -27,6 +31,7 @@ namespace AuthenticatedWebAPI.Controllers
             _emailService = emailService;
             _tokenService = tokenService;
             _roleManager = roleManager;
+            _dbContext = dbContext;
         }
 
 
@@ -129,7 +134,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { message = message });
         }
 
-        [HttpGet("logout"), Authorize]
+        [HttpGet("logout"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> LogoutUser()
         {
             string message = "You are free to go !";
@@ -145,7 +150,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { message = message });
         }
 
-        [HttpGet("admin"), Authorize]
+        [HttpGet("admin"), Authorize(Roles = "Admin")]
         public ActionResult AdminPage()
         {
             string[] partners =
@@ -155,7 +160,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { trustedPartners = partners });
         }
 
-        [HttpGet("home/{email}"), Authorize]
+        [HttpGet("home/{email}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> HomePage(string email)
         {
             var _userInfo = await _userManager.FindByEmailAsync(email).ConfigureAwait(false);
@@ -166,7 +171,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { userInfo = _userInfo });
         }
 
-        [HttpGet("chkusr"), Authorize]
+        [HttpGet("chkusr"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> CheckUser()
         {
             string message = "logged in";
@@ -194,7 +199,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { message = message, user = currentUser });
         }
 
-        [HttpPost("change-password"), Authorize]
+        [HttpPost("change-password"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> ChangePassword(ChangePasswordDto model)
         {
             IdentityResult result = null;
@@ -376,7 +381,21 @@ namespace AuthenticatedWebAPI.Controllers
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            var token = _tokenService.GenerateToken(user, roles);
+
+            // Fetch permissions
+            var roleIds = _roleManager.Roles.Where(r => roles.Contains(r.Name)).Select(r => r.Id).ToList();
+            var permissionsIds = _dbContext.RolePermissions
+                .Where(rp => roleIds.Contains(rp.RoleId))
+                .Select(rp => rp.PermissionId)
+                .Distinct()
+                .ToList();
+
+            var permissionNames = _dbContext.Permissions
+                .Where(p => permissionsIds.Contains(p.Id))
+                .Select(p => p.Name)
+                .ToList();
+
+            var token = _tokenService.GenerateToken(user, roles, permissionNames);
 
             return Ok(new { Token = token });
         }

@@ -16,18 +16,25 @@ namespace AuthenticatedWebAPI.Service
             _configuration = configuration;
         }
 
-        public string GenerateToken(User user, IList<string> roles)
+        public string GenerateToken(User user, IList<string> roles, IList<string> permissions)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
-            foreach (var role in roles)
+            // Add role claims
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            // Add permission claims
+            claims.AddRange(permissions.Select(permission => new Claim("Permission", permission)));
+
+        /*    foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            }*/
 
             //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
