@@ -14,11 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+
 // Identity implementation
-//builder.Services.AddAuthorization();
 
 // Adding EF Core with SQL Server
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -43,19 +44,12 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+
     };
 });
 
 // Add Authorization
 builder.Services.AddAuthorization();
-
-/*builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserOnly", policy => policy.RequireRole("User"));
-});*/
-
-
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -69,13 +63,13 @@ builder.Services.Configure<IdentityOptions>(options =>
 
     options.SignIn.RequireConfirmedEmail = true;
 
-   /* options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-    options.Lockout.AllowedForNewUsers = true;
+    /* options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+     options.Lockout.MaxFailedAccessAttempts = 5;
+     options.Lockout.AllowedForNewUsers = true;
 
-    options.User.AllowedUserNameCharacters =
-    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-    options.User.RequireUniqueEmail = true;*/
+     options.User.AllowedUserNameCharacters =
+     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+     options.User.RequireUniqueEmail = true;*/
 
 });
 

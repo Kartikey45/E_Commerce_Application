@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class DynamicPermissionAttribute : AuthorizeAttribute, IAuthorizationFilter
+public class DynamicPermissionAttribute : Attribute, IAuthorizationFilter
 {
     private readonly string _requiredPermission;
 
@@ -13,6 +12,8 @@ public class DynamicPermissionAttribute : AuthorizeAttribute, IAuthorizationFilt
 
     public void OnAuthorization(AuthorizationFilterContext context)
     {
+        Console.WriteLine("OnAuthorization invoked.");
+
         // Check if user is authenticated
         if (!context.HttpContext.User.Identity?.IsAuthenticated ?? false)
         {
@@ -34,3 +35,4 @@ public class DynamicPermissionAttribute : AuthorizeAttribute, IAuthorizationFilt
         }
     }
 }
+
