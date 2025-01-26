@@ -374,9 +374,24 @@ namespace AuthenticatedWebAPI.Controllers
         public async Task<IActionResult> Authenticate([FromBody] SignInUserDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+            //if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+            if (user == null)
             {
-                return Unauthorized();
+                return Unauthorized("check your login credentials and try again.");
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.RememberMe, true).ConfigureAwait(false);
+            if (result.IsLockedOut)
+            {
+                return Unauthorized("Account has been blocked , please try after sometime.");
+            }
+            if (result.IsNotAllowed)
+            {
+                return Unauthorized("Not allowed to login.");
+            }
+            if (!result.Succeeded)
+            {
+                return Unauthorized("check your login credentials and try again.");
             }
 
             var roles = await _userManager.GetRolesAsync(user);
