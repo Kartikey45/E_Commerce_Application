@@ -36,103 +36,6 @@ namespace AuthenticatedWebAPI.Controllers
 
         #region User Management
 
-        [HttpPost("SendEMail")]
-        public async Task<ActionResult> SendMail()
-        {
-            string message = "mail send";
-            try
-            {
-                UserEmailOptions options = new()
-                {
-                    ToEmails = new List<string>() { "singhkartikey45@gmail.com" },
-                    PlaceHolders = new List<KeyValuePair<string, string>>()
-                    {
-                        new KeyValuePair<string, string>("{{UserName}}", "Kartikey Singh")
-                    }
-                };
-                await _emailService.SendTestEmail(options).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong, please try again." + ex.Message);
-            }
-            return Ok(new { message = message });
-        }
-
-        [HttpPost("register")]
-        public async Task<ActionResult> RegisterUser([FromBody] SignUpUserDto signUpUser)
-        {
-            string message = "";
-            IdentityResult result = new();
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState
-                       .Where(x => x.Value.Errors.Any())
-                       .ToDictionary(
-                           x => x.Key,
-                           x => x.Value.Errors.Select(e => e.ErrorMessage).ToList()
-                       );
-                    return BadRequest(errors);
-                }
-
-                var user = new User()
-                {
-                    Name = signUpUser.Name,
-                    Email = signUpUser.Email,
-                    UserName = signUpUser.Email,
-                    IsAdmin = signUpUser.IsAdmin
-                };
-                result = await _userManager.CreateAsync(user, signUpUser.Password).ConfigureAwait(false);
-                if (!result.Succeeded)
-                {
-                    return BadRequest(result);
-                }
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
-                if (!string.IsNullOrEmpty(token))
-                {
-                    await _emailService.SendEmailForConfirmation(user, token);
-                }
-                message = "registered successfull.";
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong, please try again." + ex.Message);
-            }
-            return Ok(new { message = message, result = result });
-        }
-
-        [HttpPost("login")]
-        public async Task<ActionResult> LoginUser([FromBody] SignInUserDto login)
-        {
-            string message = string.Empty;
-            try
-            {
-                var _user = await _userManager.FindByEmailAsync(login.Email).ConfigureAwait(false);
-                /* if (_user != null && !_user.EmailConfirmed)
-                 {
-                     _user.EmailConfirmed = true;
-                 }*/
-                var result = await _signInManager.PasswordSignInAsync(_user, login.Password, login.RememberMe, false).ConfigureAwait(false);
-
-                if (!result.Succeeded)
-                {
-                    return Unauthorized("check your login credentials and try again.");
-                }
-                _user.LastLogin = DateTime.Now;
-                var _updateResult = await _userManager.UpdateAsync(_user).ConfigureAwait(false);
-
-                message = "login successfull.";
-            }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong, please try again." + ex.Message);
-            }
-
-            return Ok(new { message = message });
-        }
-
         [HttpGet("logout"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> LogoutUser()
         {
@@ -170,7 +73,7 @@ namespace AuthenticatedWebAPI.Controllers
             return Ok(new { userInfo = _userInfo });
         }
 
-        [HttpGet("chkusr"), Authorize(Roles = "Admin")]
+        [HttpGet("check-authentication"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> CheckUser()
         {
             string message = "logged in";
