@@ -207,69 +207,29 @@ namespace AuthenticatedWebAPI.Controllers
         [HttpPost("add-user")]
         public async Task<ActionResult> AddUser([FromBody] SignUpUserDto signUpUser)
         {
-            string message = "";
-            IdentityResult result = new();
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState
-                       .Where(x => x.Value.Errors.Any())
-                       .ToDictionary(
-                           x => x.Key,
-                           x => x.Value.Errors.Select(e => e.ErrorMessage).ToList()
-                       );
-                    return BadRequest(errors);
-                }
+                var errors = ModelState
+                   .Where(x => x.Value.Errors.Any())
+                   .ToDictionary(
+                       x => x.Key,
+                       x => x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                   );
+                return BadRequest(errors);
+            }
 
-                // Check if duplicate user exists
-                var userExists = await _userManager.FindByEmailAsync(signUpUser.Email);
-                if (userExists != null)
-                {
-                    return BadRequest($"Email '{signUpUser.Email}' already exists.");
-                }
+            var result = await _userService.AddUserAsync(signUpUser);
 
-                // Check if the role exists
-                var roleExists = await _roleManager.RoleExistsAsync(signUpUser.RoleName);
-                if (!roleExists)
-                {
-                    return BadRequest($"Role '{signUpUser.RoleName}' does not exist.");
-                }
-
-                var user = new User()
-                {
-                    Name = signUpUser.Name,
-                    Email = signUpUser.Email,
-                    UserName = signUpUser.Email,
-                    IsAdmin = signUpUser.IsAdmin
-                };
-                result = await _userManager.CreateAsync(user, signUpUser.Password).ConfigureAwait(false);
-                if (!result.Succeeded)
+            if (!result.Success)
+            {
+                if (result.Errors.Any())
                 {
                     return BadRequest(result.Errors);
                 }
-
-                // Add user to the role
-                var roleAssignmentResult = await _userManager.AddToRoleAsync(user, signUpUser.RoleName);
-                if (!roleAssignmentResult.Succeeded)
-                {
-                    return BadRequest(roleAssignmentResult.Errors);
-                }
-
-                // Send email confirmation
-                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
-                if (!string.IsNullOrEmpty(token))
-                {
-                    await _emailService.SendEmailForConfirmation(user, token);
-                }
-                message = "registered successfull.";
-
+                return BadRequest(result.Message);
             }
-            catch (Exception ex)
-            {
-                return BadRequest("something went wrong, please try again." + ex.Message);
-            }
-            return Ok(new { message = message, result = result });
+
+            return Ok(new { message = result.Message, result = result.IdentityResult });
         }
 
 
