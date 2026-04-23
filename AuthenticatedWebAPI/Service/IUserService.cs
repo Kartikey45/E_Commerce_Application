@@ -7,5 +7,6 @@ namespace AuthenticatedWebAPI.Service
         string GetUserId();
         bool IsAuthenticated();
         Task<UserCreationResultDto> AddUserAsync(SignUpUserDto signUpUser);
+        Task<AuthenticationResultDto> AuthenticateUserAsync(SignInUserDto loginDto);
     }
 }

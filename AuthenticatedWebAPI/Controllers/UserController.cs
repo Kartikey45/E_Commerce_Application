@@ -236,45 +236,29 @@ namespace AuthenticatedWebAPI.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate([FromBody] SignInUserDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
-            //if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
-            if (user == null)
+            if (!ModelState.IsValid)
             {
-                return Unauthorized("check your login credentials and try again.");
+                var errors = ModelState
+                   .Where(x => x.Value.Errors.Any())
+                   .ToDictionary(
+                       x => x.Key,
+                       x => x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                   );
+                return BadRequest(errors);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user, loginDto.Password, loginDto.RememberMe, true).ConfigureAwait(false);
-            if (result.IsLockedOut)
+            var result = await _userService.AuthenticateUserAsync(loginDto);
+
+            if (!result.Success)
             {
-                return Unauthorized("Account has been blocked , please try after sometime.");
-            }
-            if (result.IsNotAllowed)
-            {
-                return Unauthorized("Not allowed to login.");
-            }
-            if (!result.Succeeded)
-            {
-                return Unauthorized("check your login credentials and try again.");
+                if (result.Errors.Any())
+                {
+                    return BadRequest(result.Errors);
+                }
+                return Unauthorized(result.Message);
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
-
-            // Fetch permissions
-            var roleIds = _roleManager.Roles.Where(r => roles.Contains(r.Name)).Select(r => r.Id).ToList();
-            var permissionsIds = _dbContext.RolePermissions
-                .Where(rp => roleIds.Contains(rp.RoleId))
-                .Select(rp => rp.PermissionId)
-                .Distinct()
-                .ToList();
-
-            var permissionNames = _dbContext.Permissions
-                .Where(p => permissionsIds.Contains(p.Id))
-                .Select(p => p.Name)
-                .ToList();
-
-            var token = _tokenService.GenerateToken(user, roles, permissionNames);
-
-            return Ok(new { Token = token });
+            return Ok(new { message = result.Message, token = result.Token });
         }
 
         #endregion
